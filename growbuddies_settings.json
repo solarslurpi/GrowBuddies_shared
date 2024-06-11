@@ -1,5 +1,6 @@
 {
     "global_settings": {
+        "version": "0.1",
         "hostname": "gus.local",
         "log_level": "DEBUG",
         "db_name": "gus",
