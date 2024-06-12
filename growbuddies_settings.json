@@ -2,10 +2,10 @@
     "global_settings": {
         "version": "0.1",
         "hostname": "gus.local",
+        "host_ip": "192.168.68.113",
         "log_level": "DEBUG",
         "db_name": "gus",
-        "pid_port": 8095,
-        "tune_port": 8096
+        "incoming_port": 8095
     },
     "pid_configs": {
         "tent_one": {
