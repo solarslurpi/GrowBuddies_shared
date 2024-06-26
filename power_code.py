@@ -1,11 +1,11 @@
 import asyncio
 import logging
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
-from GrowBuddies_shared.mqtt_code import MQTTClient
-from GrowBuddies_shared.logger_code import LoggerBase
-from GrowBuddies_shared.settings_model import Settings
+from mqtt_code import MQTTClient
+from logger_code import LoggerBase
+from settings_model import Settings
 
 logger = LoggerBase.setup_logger("MistBuddyPower", logging.DEBUG)
 
@@ -30,7 +30,11 @@ class PowerBuddy:
     async def power_on(self, seconds_on: float) -> None:
         for power_command in self.power_topics:
             try:
-                # TURN POWER ON.
+                # TURN POWER ON.  The code is turning on a Tasmotized switch.  The code sends a Pulsetime.  This is the amount of time the switch should stay on until turning off.
+
+                # PulseTime<x> where x = 1..111 =  x  0.1 second increments. Thus the range is .1 to 11.1 seconds.
+                # PulseTime<x> where x = 112..64900 = - 100.  Thus the range is 12 to 6,4800 seconds.
+                # First Publish the Power on command
                 self.mqtt_client.publish(power_command, 1, qos=1)
                 # Split the topic by the '/'
                 parts = power_command.split("/")
@@ -38,10 +42,17 @@ class PowerBuddy:
                 parts[-1] = "PulseTime"
                 # Join the parts back together to form the new topic
                 pulsetime_command = "/".join(parts)
+                # PulseTime command uses an algorithm defined at https://tasmota.github.io/docs/Commands/#control:
+                # PulseTime<x> where x = 112..64900 = - 100.  Thus the range is 12 to 6,4800 seconds.
+                if seconds_on >= 12:
+                    pulsetime_on = seconds_on + 100
+                # I must be missing something. .1 increments stop at 11.1 seconds. Add 100 starts at 12 seconds.  What happens between 11.1. and 12 seconds?
+                elif seconds_on < 12:
+                    # PulseTime<x> where x = 1..111 =  x  0.1 second increments. Thus the range is .1 to 11.1 seconds.
+                    pulsetime_on = seconds_on * 10 # e.g.: if pulsetime_on = 30 .1 second increments = 3 seconds.
                 # We will use numbers between 112 and 64900 for the PulseTime (e.g.: 112 - 100 = 12 seconds)
-                pulsetime_on = seconds_on + 100
                 logger.debug(
-                    f"PulseTime: {pulsetime_on} Number seconds on: {pulsetime_on - 100}"
+                    f"=+= POWER ON -> {seconds_on} seconds. Pulsetime value: {pulsetime_on}.=+="
                 )
                 # LET TASMOTA KNOW HOW LONG TO KEEP THE POWER ON.
                 self.mqtt_client.publish(pulsetime_command, pulsetime_on, qos=1)

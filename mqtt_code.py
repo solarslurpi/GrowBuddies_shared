@@ -1,8 +1,8 @@
 """The focus is on publishing mqtt messages to the Tasmotized power switches.  Receiving readings comes over telegraf.
 
 """
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 
 import logging
@@ -11,7 +11,7 @@ import string
 import paho.mqtt.client as mqtt
 
 
-from GrowBuddies_shared.logger_code import LoggerBase
+from logger_code import LoggerBase
 
 logger = LoggerBase.setup_logger("mqtt_code", logging.DEBUG)
 #
