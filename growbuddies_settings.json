@@ -1,12 +1,15 @@
 {
     "global_settings": {
         "version": "0.1",
-        "hostname": "gus.local",
-        "host_ip": "192.168.68.113",
+        "address": "192.168.68.113",
         "log_level": "DEBUG",
         "db_name": "gus",
         "incoming_port": 8095
     },
+    "mqtt_power_messages": {
+        "tent_one": {"mistbuddy":["cmnd/tent_one_mistbuddy_fan/POWER", "cmnd/tent_one_mistbuddy_mister/POWER"],"co2buddy":["cmnd/tent_one_co2buddy/POWER"]}
+    },
+
     "pid_configs": {
         "tent_one": {
             "MistBuddy": {
@@ -20,7 +23,7 @@
                 "tune_start": 0,
                 "tune_increment": 0,
                 "comparison_function": "less_than",
-                "mqtt_power_topics": ["cmnd/mistbuddy_fan/POWER", "cmnd/mistbuddy_mister/POWER"],
+                "mqtt_power_messages": ["cmnd/mistbuddy_fan/POWER", "cmnd/mistbuddy_mister/POWER"],
                 "telegraf_fieldname": "vpd_mean",
                 "num_bias_seconds_on": 20
             },
@@ -35,7 +38,7 @@
                 "tune_start": 0,
                 "tune_increment": 0,
                 "comparison_function": "greater_than",
-                "mqtt_power_topics": ["cmnd/stomabuddy/POWER"],
+                "mqtt_power_messages": ["cmnd/stomabuddy/POWER"],
                 "telegraf_fieldname": "CO2_mean",
                 "num_bias_seconds_on": 0
             }
