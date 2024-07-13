@@ -37,12 +37,12 @@ class PowerBuddy:
     '''
     Operates the power switch (on/off) for Tasmotized devices associated with the MistBuddy name.
     '''
-    def __init__(self, services_address:ServicesAddress, power_messages: PowerMessages):
+    def __init__(self, address, power_messages: list[str]):
         '''mqtt messaging is used to send messages to the Tasmotized power switches. The MQTTClient class handles sending the messages.  In order to do that, the IP address (or hostname) of the mqtt broker is needed as well as the mqtt topics. These are located within the instances of the Settings model class.'''
         try:
             # Manually validate
-            validated_services_address = ServicesAddress(address=services_address.address)
-            self.power_messages = PowerMessages(power_messages=power_messages.power_messages)
+            validated_services_address = ServicesAddress(address=address)
+            self.power_messages = PowerMessages(power_messages=power_messages)
         except ValidationError as e:
             logger.error(f"Validation error: {e}")
             raise

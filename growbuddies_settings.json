@@ -7,7 +7,7 @@
         "incoming_port": 8095
     },
     "mqtt_power_messages": {
-        "tent_one": {"mistbuddy":["cmnd/tent_one_mistbuddy_fan/POWER", "cmnd/tent_one_mistbuddy_mister/POWER"],"co2buddy":["cmnd/tent_one_co2buddy/POWER"]}
+        "tent_one": {"mistbuddy":["cmnd/mistbuddy_fan/POWER", "cmnd/mistbuddy_mister/POWER"],"co2buddy":["cmnd/stomabuddy/POWER"]}
     },
 
     "pid_configs": {
